@@ -122,6 +122,8 @@ pub use fmc::{PinsSdramBank1, PinsSdramBank2};
 mod sdram;
 pub use sdram::Sdram;
 
+mod as4c16m32msa;
+pub use as4c16m32msa::*;
 mod is42s32800g;
 pub use is42s32800g::*;
 mod is42s16400j;

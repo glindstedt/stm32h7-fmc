@@ -156,6 +156,48 @@ macro_rules! impl_32bit_sdram {
     }
 }
 
+macro_rules! impl_32bit_sdram_13_address_lines {
+    ($($pins:tt: [$eBankN:expr, $ckeN:tt, $neN:tt,
+        $nInternalB:expr $(, $pba1:ident, $ba1:tt)*]),+) => {
+        $(
+            #[rustfmt::skip]
+            /// 32-bit SDRAM
+            impl<FMC, PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10,
+            PA11, PA12, PBA0, $($pba1,)* PD0, PD1, PD2, PD3, PD4, PD5, PD6, PD7, PD8,
+            PD9, PD10, PD11, PD12, PD13, PD14, PD15, PD16, PD17, PD18, PD19,
+            PD20, PD21, PD22, PD23, PD24, PD25, PD26, PD27, PD28, PD29, PD30,
+            PD31, PNBL0, PNBL1, PNBL2, PNBL3, PSDCKEn, PSDCLK, PSDNCAS,
+            PSDNEn, PSDNRAS, PSDNWE>
+                PinsSdram<FMC>
+                for $pins<(PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10,
+                     PA11, PA12, PBA0, $($pba1,)* PD0, PD1, PD2, PD3, PD4, PD5, PD6, PD7,
+                     PD8, PD9, PD10, PD11, PD12, PD13, PD14, PD15, PD16, PD17,
+                     PD18, PD19, PD20, PD21, PD22, PD23, PD24, PD25, PD26, PD27,
+                     PD28, PD29, PD30, PD31, PNBL0, PNBL1, PNBL2, PNBL3, PSDCKEn,
+                     PSDCLK, PSDNCAS, PSDNEn, PSDNRAS, PSDNWE)>
+            where PA0: A0<FMC>, PA1: A1<FMC>, PA2: A2<FMC>, PA3: A3<FMC>, PA4:
+            A4<FMC>, PA5: A5<FMC>, PA6: A6<FMC>, PA7: A7<FMC>, PA8: A8<FMC>, PA9:
+            A9<FMC>, PA10: A10<FMC>, PA11: A11<FMC>, PA12: A12<FMC>, PBA0: BA0<FMC>,
+            $($pba1:$ba1<FMC>,)*
+            PD0: D0<FMC>, PD1: D1<FMC>, PD2: D2<FMC>, PD3: D3<FMC>, PD4:
+            D4<FMC>, PD5: D5<FMC>, PD6: D6<FMC>, PD7: D7<FMC>, PD8: D8<FMC>, PD9:
+            D9<FMC>, PD10: D10<FMC>, PD11: D11<FMC>, PD12: D12<FMC>, PD13:
+            D13<FMC>, PD14: D14<FMC>, PD15: D15<FMC>, PD16: D16<FMC>, PD17:
+            D17<FMC>, PD18: D18<FMC>, PD19: D19<FMC>, PD20: D20<FMC>, PD21:
+            D21<FMC>, PD22: D22<FMC>, PD23: D23<FMC>, PD24: D24<FMC>, PD25:
+            D25<FMC>, PD26: D26<FMC>, PD27: D27<FMC>, PD28: D28<FMC>, PD29:
+            D29<FMC>, PD30: D30<FMC>, PD31: D31<FMC>, PNBL0: NBL0<FMC>, PNBL1:
+            NBL1<FMC>, PNBL2: NBL2<FMC>, PNBL3: NBL3<FMC>, PSDCKEn: $ckeN<FMC>,
+                  PSDCLK: SDCLK<FMC>, PSDNCAS: SDNCAS<FMC>, PSDNEn: $neN<FMC>, PSDNRAS:
+            SDNRAS<FMC>, PSDNWE: SDNWE<FMC> {
+                const ADDRESS_LINES: u8 = 13;
+                const EXTERNAL_BANK: u8 = $eBankN;
+                const NUMBER_INTERNAL_BANKS: u8 = $nInternalB;
+            }
+        )+
+    }
+}
+
 impl_16bit_sdram! {
     // 16-bit SDRAM with 12 address lines, BA0 only
     PinsSdramBank1: [1, SDCKE0, SDNE0, 2],
@@ -170,6 +212,15 @@ impl_32bit_sdram! {
     PinsSdramBank1: [1, SDCKE0, SDNE0, 2],
     PinsSdramBank2: [2, SDCKE1, SDNE1, 2],
     // 32-bit SDRAM with 12 address lines, BA0 and BA1
+    PinsSdramBank1: [1, SDCKE0, SDNE0, 4, PBA1, BA1],
+    PinsSdramBank2: [2, SDCKE1, SDNE1, 4, PBA1, BA1]
+}
+
+impl_32bit_sdram_13_address_lines! {
+    // 32-bit SDRAM with 13 address lines, BA0 only
+    // PinsSdramBank1: [1, SDCKE0, SDNE0, 2],
+    // PinsSdramBank2: [2, SDCKE1, SDNE1, 2],
+    // 32-bit SDRAM with 13 address lines, BA0 and BA1
     PinsSdramBank1: [1, SDCKE0, SDNE0, 4, PBA1, BA1],
     PinsSdramBank2: [2, SDCKE1, SDNE1, 4, PBA1, BA1]
 }

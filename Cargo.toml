@@ -21,7 +21,11 @@ default-features = false
 optional = true
 
 [dependencies.stm32h7xx-hal]
-version = "^0.6.0"
+#version = "^0.6.0"
+# TODO temporary
+version = "0.6.0"
+git = "https://github.com/mtthw-meyer/stm32h7xx-hal.git"
+branch = "sai-i2s-v0.2.x-1"
 # NOTE: Keep re-exported feature flags below up-to-date with stm32h7xx-hal
 
 [features]
